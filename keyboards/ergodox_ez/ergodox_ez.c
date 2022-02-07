@@ -65,7 +65,9 @@ void matrix_init_kb(void) {
     PORTE |=  (1<<6);
 
     keyboard_config.raw = eeconfig_read_kb();
-    ergodox_led_all_set((uint8_t)keyboard_config.led_level * 255 / 4 );
+    ergodox_right_led_1_set(15);
+    ergodox_right_led_2_set(5);
+    ergodox_right_led_3_set(10);
 #ifdef RGB_MATRIX_ENABLE
     if (keyboard_config.rgb_matrix_enable) {
         rgb_matrix_set_flags(LED_FLAG_ALL);
@@ -82,7 +84,9 @@ void matrix_init_kb(void) {
 void ergodox_blink_all_leds(void)
 {
     ergodox_led_all_off();
-    ergodox_led_all_set(LED_BRIGHTNESS_DEFAULT);
+    ergodox_right_led_1_set(15);
+    ergodox_right_led_2_set(5);
+    ergodox_right_led_3_set(10);
     ergodox_right_led_1_on();
     _delay_ms(50);
     ergodox_right_led_2_on();
@@ -131,7 +135,9 @@ void ergodox_blink_all_leds(void)
 
     //ergodox_led_all_on();
     //_delay_ms(333);
-    ergodox_led_all_set((uint8_t)keyboard_config.led_level * 255 / 4 );
+    ergodox_right_led_1_set(15);
+    ergodox_right_led_2_set(5);
+    ergodox_right_led_3_set(10);
 
     ergodox_led_all_off();
 }
@@ -359,13 +365,17 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LED_LEVEL:
             if (record->event.pressed) {
-                 keyboard_config.led_level++;
-                 if (keyboard_config.led_level > 4) {
+                keyboard_config.led_level++;
+
+                if (keyboard_config.led_level > 4) {
                     keyboard_config.led_level = 0;
-                 }
-                 ergodox_led_all_set((uint8_t)keyboard_config.led_level * 255 / 4 );
-                 eeconfig_update_kb(keyboard_config.raw);
-                 layer_state_set_kb(layer_state);
+                }
+                
+                ergodox_right_led_1_set(15);
+                ergodox_right_led_2_set(5);
+                ergodox_right_led_3_set(10);
+                eeconfig_update_kb(keyboard_config.raw);
+                layer_state_set_kb(layer_state);
             }
             break;
 #ifdef RGB_MATRIX_ENABLE
@@ -459,12 +469,12 @@ void matrix_scan_kb(void) {
 
 #ifdef DYNAMIC_MACRO_ENABLE
     if (is_dynamic_recording) {
-        ergodox_right_led_1_off();
+        ergodox_right_led_3_off();
         // if (timer_elapsed(dynamic_loop_timer) > 5)
         {
             static uint8_t counter;
             counter++;
-            if (counter > 100) ergodox_right_led_1_on();
+            if (counter > 100) ergodox_right_led_3_on();
             dynamic_loop_timer = timer_read();
         }
     }
